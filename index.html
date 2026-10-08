@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lista de tareas</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <header class="app__header">
+      <h1>Lista de tareas</h1>
+      <p class="app__summary" id="summary" aria-live="polite">No hay tareas.</p>
+    </header>
+
+    <form class="new-task" id="new-task-form" autocomplete="off">
+      <label class="visually-hidden" for="new-task-input">Nueva tarea</label>
+      <input id="new-task-input" name="title" type="text" maxlength="200" placeholder="¿Qué tienes que hacer?" required>
+      <button type="submit">Añadir</button>
+    </form>
+
+    <p class="storage-warning" id="storage-warning" role="alert" hidden>
+      No se puede usar el almacenamiento del navegador: las tareas no se conservarán al recargar.
+    </p>
+
+    <ul class="task-list" id="task-list" aria-label="Tareas"></ul>
+    <p class="empty-state" id="empty-state">Todavía no hay tareas. Añade la primera arriba.</p>
+  </main>
+</body>
+</html>
