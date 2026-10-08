@@ -3,12 +3,77 @@
 ## Estados
 
 - **LIBRE**: nadie tiene turno; solo lectura hasta asignación expresa del usuario.
-- **EN_CURSO**: el agente asignado tiene permiso exclusivo dentro del alcance registrado.
-- **ENTREGA_LISTA**: el agente terminó y cesó la escritura; el siguiente necesita una nueva asignación del usuario.
+- **EN_CURSO**: el agente asignado tiene permiso exclusivo dentro del alcance registrado. Si Claude Code ejecuta a Codex, el estado sigue en EN_CURSO hasta que Claude confirme que el proceso terminó, aunque Codex ya haya preparado su entrega; mientras tanto no se admite otro escritor.
+- **ENTREGA_LISTA**: el agente terminó y cesó la escritura; el siguiente necesita una nueva asignación del usuario. Si Claude Code ejecutó a Codex, solo Claude lo marca, después de confirmar que el proceso terminó.
 
 Conserva las entregas anteriores en el historial al iniciar una nueva. El estado no sustituye la autorización del usuario ni bloquea técnicamente otros procesos.
 
 ## Última entrega / estado actual
+
+- **Estado:** ENTREGA_LISTA.
+- **Agente responsable:** Claude Code.
+- **Modo de ejecución:** sesión directa de Claude Code. No se ejecutó Codex en este turno.
+- **Autorización expresa del usuario:** «Asigno a Claude la corrección de esa referencia: «confirmación de cierre del paso 7» debe apuntar al paso 6. Revisa que las demás referencias coincidan. El alcance sigue limitado a AGENTS.md y docs/ESTADO_TURNOS.md. Después autorizo crear el commit de esos dos archivos, incluyendo los cambios de colaboración ya revisados, con el mensaje docs: permitir que Claude ejecute Codex en turnos asignados. No autorizo push ni ejecutar Codex todavía.» Aclaración posterior del usuario: Claude señaló que en «Turnos de escritura de Codex» el paso 6 es «Fallo o límite de uso» y el paso 7 es «Confirmación de cierre», y el usuario eligió «Paso 7 con su nombre».
+- **Tarea asignada:** precisar la referencia del paso 1 de «Turnos de escritura de Codex» a la confirmación de cierre, revisar que las demás referencias coincidan y crear el commit autorizado.
+- **Archivos que pueden modificarse:** únicamente `AGENTS.md` y `docs/ESTADO_TURNOS.md`.
+- **Referencia inicial y cambios previos que deben preservarse:** `main` en `e5d7d15389eeafb9831e4063e2a06f09ac208716`, un commit por delante de `origin/main` (`e78497c`); push pendiente y no autorizado. Cambios sin commit de las entregas 3 y 4 en `AGENTS.md` y `docs/ESTADO_TURNOS.md`, revisados por el usuario: se conservan y se incluyen en el commit autorizado. Sin cambios preparados, archivos sin seguimiento ni procesos `codex.exe`.
+- **Cambios realizados:** en `AGENTS.md`, el paso 1 de «Turnos de escritura de Codex» remite ahora a «la confirmación de cierre (paso 7, «Confirmación de cierre», de esta sección)». No se cambió ninguna otra regla. En `docs/ESTADO_TURNOS.md`, se archivó la entrega 4 sin cambios y se registró esta entrega.
+- **Pruebas realizadas y resultados (incluidas omitidas):** al iniciar, solo había los cambios sin commit de las entregas 3 y 4, sin cambios preparados, archivos sin seguimiento ni procesos `codex.exe`. Se comprobaron todas las remisiones a pasos de `AGENTS.md` contra el título real: el paso 7 lleva a «Confirmación de cierre» y el nombre coincide; los pasos 1 a 4 de «Inicio del turno» son las comprobaciones previas; los pasos 1 a 5 de «Cierre y entrega» llegan hasta la solicitud de commit. En el registro, «paso 4 de «Inicio del turno»» y «paso 6 de «Cierre y entrega»» coinciden. Las entregas 1 a 4 del historial coinciden con sus originales. `git diff --check` no encuentra errores de espacios y solo cambian `AGENTS.md` y `docs/ESTADO_TURNOS.md`. No se ejecutó Codex. No hay aplicación ni pruebas funcionales.
+- **Errores encontrados:** ninguno. La referencia anterior al paso 7 ya era correcta; a elección del usuario se precisó con el nombre del paso.
+- **Pendientes:** push de `e5d7d15` y del commit de esta entrega, no autorizado. Primera prueba real de un turno de escritura de Codex ejecutado por Claude Code. Decisión del usuario sobre `trust_level = "trusted"` en la configuración global de Codex, que no se modificó.
+- **Último commit o referencia de Git:** referencia anterior al commit de entrega: `e5d7d15389eeafb9831e4063e2a06f09ac208716`. Obtener el SHA del commit de entrega con `git log -1 --format='%H %s'`.
+- **Commit de entrega y estado de autorización:** autorizado expresamente por el usuario con «Después autorizo crear el commit de esos dos archivos, incluyendo los cambios de colaboración ya revisados, con el mensaje docs: permitir que Claude ejecute Codex en turnos asignados. No autorizo push ni ejecutar Codex todavía.» Archivos: `AGENTS.md` y `docs/ESTADO_TURNOS.md`, con los cambios de las entregas 3, 4 y 5. Mensaje acordado: `docs: permitir que Claude ejecute Codex en turnos asignados`. Push no autorizado.
+- **Procesos de escritura iniciados, detenidos o pendientes de verificar:** no se iniciaron servidores, vigilantes, tareas delegadas ni procesos persistentes, y no se ejecutó Codex. Los comandos usados terminaron. No hay procesos `codex.exe` en ejecución en este equipo. El estado de Codex en la nube no se puede verificar desde este entorno.
+- **Entrega preparada por Codex:** no aplica.
+- **Confirmación de cierre por Claude Code:** no aplica.
+- **Instrucciones para el siguiente agente:** leer `AGENTS.md`, incluida la sección «Ejecución de Codex desde Claude Code», y este registro; Claude Code carga además `CLAUDE.md`. Con `git log -1` comprobar el commit de esta entrega y con `git status --short --branch` si `main` va por delante de `origin/main` (push pendiente). Si el commit no existe, reconocer y preservar los cambios sin commit en ambos archivos. No modificar nada ni ejecutar Codex hasta recibir una asignación expresa con tarea y alcance.
+
+## Plantilla para próximos turnos
+
+Al recibir una asignación válida, archiva la entrega anterior en una sección de historial y completa estos campos:
+
+- Estado: EN_CURSO / ENTREGA_LISTA / LIBRE.
+- Agente responsable:
+- Modo de ejecución (sesión directa, Codex CLI ejecutado por Claude Code con su `--sandbox` explícito, o nube):
+- Autorización expresa del usuario:
+- Tarea asignada:
+- Archivos que pueden modificarse:
+- Referencia inicial y cambios previos que deben preservarse:
+- Cambios realizados:
+- Pruebas realizadas y resultados (incluidas omitidas):
+- Errores encontrados:
+- Pendientes:
+- Último commit o referencia de Git:
+- Commit de entrega y estado de autorización:
+- Procesos de escritura iniciados, detenidos o pendientes de verificar:
+- Entrega preparada por Codex (solo si Claude Code ejecutó a Codex):
+- Confirmación de cierre por Claude Code (identificador del proceso, código de salida y hora):
+- Instrucciones para el siguiente agente:
+
+## Historial
+
+### Entrega 1: OpenAI Codex (commit `e78497c`)
+
+Registro original de Codex, conservado sin cambios. Describe el estado anterior a la publicación de `e78497c` en la rama `main` de GitHub; el estado posterior figura en las entregas siguientes.
+
+- **Estado del turno:** ENTREGA_LISTA.
+- **Agente responsable:** OpenAI Codex.
+- **Autorización:** petición expresa del usuario para configurar únicamente el sistema de colaboración entre Claude Code y Codex.
+- **Tarea asignada:** crear reglas compartidas, carga de reglas para Claude y registro de turnos; sin desarrollar la aplicación.
+- **Archivos que pueden modificarse:** `AGENTS.md`, `CLAUDE.md`, `docs/ESTADO_TURNOS.md`.
+- **Referencia inicial de Git:** rama local `work`, sin commits; repositorio inicialmente vacío y sin cambios. Remoto GitHub configurado para `Adictoz132413/claude_cod_codex-`.
+- **Cambios realizados:** creados los tres documentos autorizados; definidos asignación exclusiva, lectura sin turno, preservación de cambios, comprobación de entrega y aprobación separada de commits.
+- **Pruebas realizadas y resultados:** inspección de Git y de la estructura completada; consulta de lectura `git ls-remote origin HEAD refs/heads/main` exitosa sin referencias devueltas. Validación documental de importación, campos, alcance y espacios en blanco completada. No hay aplicación, manifiestos, dependencias ni pruebas funcionales disponibles.
+- **Errores encontrados:** `git log` no puede mostrar historial porque la rama todavía no tiene commits; condición esperada en un repositorio vacío. No se encontró `main` en la consulta remota.
+- **Pendientes:** decidir cómo compartir esta entrega con Claude Code y autorizar por separado cualquier push. No se ha renombrado la rama ni hecho push. El usuario decidirá si desea usar `main` antes de publicar.
+- **Último commit o referencia de Git:** referencia anterior: sin commits; HEAD simbólico apunta a `refs/heads/work`. Esta entrega se guarda como primer commit autorizado; comprobar su creación y obtener su SHA con `git log -1 --format='%H %s'` para obtener la referencia de entrega.
+- **Commit de entrega:** autorizado expresamente por el usuario con «Autorizo el primer commit con los tres archivos de colaboración». Mensaje acordado: `docs: configurar colaboración por turnos entre Claude y Codex`.
+- **Procesos de escritura:** no se iniciaron servidores, vigilantes, tareas delegadas ni procesos persistentes de escritura. Los comandos de creación y validación terminaron. No se puede certificar desde este entorno el estado de sesiones externas del usuario.
+- **Instrucciones para el siguiente agente:** leer `AGENTS.md` y este registro; Claude debe cargar además `CLAUDE.md`. Consultar el primer commit de entrega y verificar que contiene exclusivamente los tres documentos acordados; preservar cualquier cambio posterior. Confirmar con el usuario que no hay otra sesión con escritura activa. No modificar nada hasta recibir una asignación expresa con tarea y alcance. Si se autoriza solo el commit, incluir exclusivamente estos tres archivos y comprobar el índice antes de confirmar.
+
+### Entrega 2: Claude Code (commit `e5d7d15`)
+
+Registro original de Claude Code, conservado sin cambios. El commit de entrega se creó como `e5d7d15` con el mensaje acordado; Claude Code añadió al final la línea `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. El push sigue pendiente.
 
 - **Estado:** ENTREGA_LISTA.
 - **Agente responsable:** Claude Code.
@@ -27,42 +92,45 @@ Conserva las entregas anteriores en el historial al iniciar una nueva. El estado
 - **Procesos de escritura iniciados, detenidos o pendientes de verificar:** no se iniciaron servidores, vigilantes, tareas delegadas ni procesos persistentes. Los comandos usados terminaron. El usuario indicó que Codex está en lectura con sus procesos de escritura detenidos y que no hay otras sesiones escribiendo. Claude Code no puede verificarlo desde este entorno.
 - **Instrucciones para el siguiente agente:** leer `AGENTS.md` y este registro; Claude Code carga además `CLAUDE.md`. Con `git log -1` comprobar si se creó el commit de esta entrega y con `git status --short --branch` si `main` va por delante de `origin/main` (push pendiente). Si el commit no existe, reconocer y preservar el cambio sin commit en `docs/ESTADO_TURNOS.md`. No modificar nada hasta recibir una asignación expresa con tarea y alcance.
 
-## Plantilla para próximos turnos
+### Entrega 3: Claude Code (sin commit; cambios conservados)
 
-Al recibir una asignación válida, archiva la entrega anterior en una sección de historial y completa estos campos:
+Registro original de Claude Code, conservado sin cambios. Su commit no llegó a crearse: el usuario asignó a continuación un ajuste final sobre los mismos archivos, y los cambios de esta entrega se conservan en el árbol de trabajo para el commit siguiente.
 
-- Estado: EN_CURSO / ENTREGA_LISTA / LIBRE.
-- Agente responsable:
-- Autorización expresa del usuario:
-- Tarea asignada:
-- Archivos que pueden modificarse:
-- Referencia inicial y cambios previos que deben preservarse:
-- Cambios realizados:
-- Pruebas realizadas y resultados (incluidas omitidas):
-- Errores encontrados:
-- Pendientes:
-- Último commit o referencia de Git:
-- Commit de entrega y estado de autorización:
-- Procesos de escritura iniciados, detenidos o pendientes de verificar:
-- Instrucciones para el siguiente agente:
+- **Estado:** ENTREGA_LISTA.
+- **Agente responsable:** Claude Code.
+- **Modo de ejecución:** sesión directa de Claude Code. No se ejecutó Codex en este turno.
+- **Autorización expresa del usuario:** «Asigno el turno a Claude Code para adaptar el protocolo de colaboración. Puede modificar únicamente AGENTS.md y docs/ESTADO_TURNOS.md. Codex queda en lectura y su consulta anterior terminó. Permite que Claude invoque a Codex para escribir únicamente cuando yo asigne expresamente una tarea a Codex con su alcance. Claude debe esperar a que termine sin escribir mientras tanto. Si Codex falla o agota su uso, detén la transferencia y avísame. Mantén los permisos explícitos de aislamiento, la aprobación separada de commits y push, y la protección de cambios ajenos. No habilites transferencias automáticas todavía, no cambies configuraciones globales ni desarrolles funcionalidades. Al terminar, muéstrame las diferencias, actualiza el registro y solicita autorización para el commit. No hagas push.»
+- **Tarea asignada:** adaptar el protocolo para que Claude Code pueda ejecutar Codex CLI con permiso de escritura solo cuando el usuario asigne expresamente una tarea a Codex con su alcance, esperando sin escribir hasta que termine y deteniendo la transferencia si Codex falla o agota su uso.
+- **Archivos que pueden modificarse:** únicamente `AGENTS.md` y `docs/ESTADO_TURNOS.md`.
+- **Referencia inicial y cambios previos que deben preservarse:** `main` en `e5d7d15389eeafb9831e4063e2a06f09ac208716` (`docs: registrar publicación de e78497c en main`), un commit por delante de `origin/main` (`e78497c`). El push de `e5d7d15` sigue pendiente y no autorizado. Árbol de trabajo limpio, sin cambios preparados ni archivos sin seguimiento. Sin procesos de Codex en ejecución. La entrega anterior de Claude Code se conserva sin cambios en «Historial».
+- **Entorno de Codex verificado:** Codex CLI 0.161.0 instalado con npm en `%APPDATA%\npm`. Sesión iniciada con ChatGPT y sin clave de API (`codex login status`: «Logged in using ChatGPT»; `codex doctor`: `stored auth mode chatgpt`, `stored API key false`). Aislamiento de Windows configurado por el usuario en modo `elevated` (`codex doctor`: `sandbox backend elevated`, `sandbox provisioning complete`). Antes de este turno, una consulta con `codex exec --sandbox read-only` terminó sin errores. En este turno no se modificó la configuración global de Codex (`~/.codex/config.toml`), que contiene `[windows] sandbox = "elevated"` y `trust_level = "trusted"` para este proyecto, escritos durante la configuración interactiva del usuario.
+- **Cambios realizados:** en `AGENTS.md`, nueva sección «Ejecución de Codex desde Claude Code». Define consultas de lectura con autorización por consulta y `--sandbox read-only`, y turnos de escritura de Codex solo con asignación expresa del usuario y `--sandbox workspace-write` explícito. Incluye opciones prohibidas, espera sin escritura, detención de la transferencia ante fallos o límite de uso, revisión, continuación en una nueva ejecución y ausencia de transferencias automáticas. En «Autoridad y permiso de escritura» se añadieron la transmisión literal de la asignación, la excepción acotada a la regla de agentes delegados y la aclaración de que el aislamiento no sustituye el protocolo. Se añadió un ejemplo de asignación a Codex. Ninguna regla existente se eliminó ni se modificó; solo se añadieron frases. En `docs/ESTADO_TURNOS.md`, archivada la entrega 2 sin cambios, actualizada la nota de la entrega 1 para remitir a las entregas siguientes, añadido el campo «Modo de ejecución» a la plantilla y registrada esta entrega.
+- **Pruebas realizadas y resultados (incluidas omitidas):** al iniciar, `git status --short --branch`, `git diff` y `git diff --cached` no mostraron cambios, no había archivos sin seguimiento, `git ls-remote --heads origin` devolvió `main` en `e78497c` y no había procesos `codex.exe` en ejecución. `codex help exec resume` mostró que esa orden no admite `--sandbox`, por lo que la continuación se definió como una nueva ejecución. Al cerrar, `git status --short` muestra solo `AGENTS.md` y `docs/ESTADO_TURNOS.md`, `git diff --check` no encuentra errores de espacios, las entregas 1 y 2 del historial coinciden con sus versiones en `e78497c` y `e5d7d15`, y todas las líneas originales de `AGENTS.md` siguen presentes. No se ejecutó Codex ni se probó todavía un turno de escritura de Codex. No hay aplicación ni pruebas funcionales.
+- **Errores encontrados:** ninguno. Limitación detectada: `codex exec resume` no permite indicar el aislamiento.
+- **Pendientes:** autorización del commit de esta entrega. Push de `e5d7d15` y de este commit, no autorizado. Primera prueba real de un turno de escritura de Codex ejecutado por Claude Code, cuando el usuario lo asigne; no se ha comprobado si `--sandbox workspace-write` permite a Codex actualizar el registro y crear commits (escritura en `.git`). Decisión del usuario sobre `trust_level = "trusted"` en la configuración global de Codex, que no se modificó.
+- **Último commit o referencia de Git:** referencia anterior al commit de entrega: `e5d7d15389eeafb9831e4063e2a06f09ac208716`. Si se crea el commit, obtener su SHA con `git log -1 --format='%H %s'`.
+- **Commit de entrega y estado de autorización:** pendiente de autorización del usuario. Archivos propuestos: `AGENTS.md` y `docs/ESTADO_TURNOS.md`. Mensaje propuesto: `docs: permitir que Claude ejecute Codex en turnos asignados`. Push no autorizado.
+- **Procesos de escritura iniciados, detenidos o pendientes de verificar:** no se iniciaron servidores, vigilantes, tareas delegadas ni procesos persistentes, y no se ejecutó Codex. Los comandos usados terminaron. El usuario indicó que Codex está en lectura y que su consulta anterior terminó; no hay procesos `codex.exe` en ejecución en este equipo. El estado de Codex en la nube no se puede verificar desde este entorno.
+- **Instrucciones para el siguiente agente:** leer `AGENTS.md`, incluida la sección «Ejecución de Codex desde Claude Code», y este registro; Claude Code carga además `CLAUDE.md`. Con `git log -1` comprobar si se creó el commit de esta entrega y con `git status --short --branch` si `main` va por delante de `origin/main` (push pendiente). Si el commit no existe, reconocer y preservar los cambios sin commit en `AGENTS.md` y `docs/ESTADO_TURNOS.md`. Para ejecutar a Codex con escritura, esperar una asignación expresa del usuario a Codex y seguir esa sección. No modificar nada hasta recibir una asignación expresa con tarea y alcance.
 
-## Historial
+### Entrega 4: Claude Code (sin commit propio; cambios conservados)
 
-### Entrega 1: OpenAI Codex (commit `e78497c`)
+Registro original de Claude Code, conservado sin cambios. Su commit no se creó por separado: el usuario asignó una corrección de referencia y autorizó un único commit con los cambios de las entregas 3, 4 y 5.
 
-Registro original de Codex, conservado sin cambios. Describe el estado anterior a la publicación de `e78497c` en la rama `main` de GitHub; el estado posterior figura en «Última entrega / estado actual».
-
-- **Estado del turno:** ENTREGA_LISTA.
-- **Agente responsable:** OpenAI Codex.
-- **Autorización:** petición expresa del usuario para configurar únicamente el sistema de colaboración entre Claude Code y Codex.
-- **Tarea asignada:** crear reglas compartidas, carga de reglas para Claude y registro de turnos; sin desarrollar la aplicación.
-- **Archivos que pueden modificarse:** `AGENTS.md`, `CLAUDE.md`, `docs/ESTADO_TURNOS.md`.
-- **Referencia inicial de Git:** rama local `work`, sin commits; repositorio inicialmente vacío y sin cambios. Remoto GitHub configurado para `Adictoz132413/claude_cod_codex-`.
-- **Cambios realizados:** creados los tres documentos autorizados; definidos asignación exclusiva, lectura sin turno, preservación de cambios, comprobación de entrega y aprobación separada de commits.
-- **Pruebas realizadas y resultados:** inspección de Git y de la estructura completada; consulta de lectura `git ls-remote origin HEAD refs/heads/main` exitosa sin referencias devueltas. Validación documental de importación, campos, alcance y espacios en blanco completada. No hay aplicación, manifiestos, dependencias ni pruebas funcionales disponibles.
-- **Errores encontrados:** `git log` no puede mostrar historial porque la rama todavía no tiene commits; condición esperada en un repositorio vacío. No se encontró `main` en la consulta remota.
-- **Pendientes:** decidir cómo compartir esta entrega con Claude Code y autorizar por separado cualquier push. No se ha renombrado la rama ni hecho push. El usuario decidirá si desea usar `main` antes de publicar.
-- **Último commit o referencia de Git:** referencia anterior: sin commits; HEAD simbólico apunta a `refs/heads/work`. Esta entrega se guarda como primer commit autorizado; comprobar su creación y obtener su SHA con `git log -1 --format='%H %s'` para obtener la referencia de entrega.
-- **Commit de entrega:** autorizado expresamente por el usuario con «Autorizo el primer commit con los tres archivos de colaboración». Mensaje acordado: `docs: configurar colaboración por turnos entre Claude y Codex`.
-- **Procesos de escritura:** no se iniciaron servidores, vigilantes, tareas delegadas ni procesos persistentes de escritura. Los comandos de creación y validación terminaron. No se puede certificar desde este entorno el estado de sesiones externas del usuario.
-- **Instrucciones para el siguiente agente:** leer `AGENTS.md` y este registro; Claude debe cargar además `CLAUDE.md`. Consultar el primer commit de entrega y verificar que contiene exclusivamente los tres documentos acordados; preservar cualquier cambio posterior. Confirmar con el usuario que no hay otra sesión con escritura activa. No modificar nada hasta recibir una asignación expresa con tarea y alcance. Si se autoriza solo el commit, incluir exclusivamente estos tres archivos y comprobar el índice antes de confirmar.
+- **Estado:** ENTREGA_LISTA.
+- **Agente responsable:** Claude Code.
+- **Modo de ejecución:** sesión directa de Claude Code. No se ejecutó Codex en este turno.
+- **Autorización expresa del usuario:** «Asigno a Claude un ajuste final limitado a AGENTS.md y docs/ESTADO_TURNOS.md: aclara que Codex puede ejecutarse en segundo plano solo durante su turno autorizado, mientras Claude permanece en lectura. El estado seguirá EN_CURSO hasta confirmar que Codex terminó. No se permitirá otro escritor ni se marcará ENTREGA_LISTA mientras siga activo. Resuelve cualquier contradicción con las reglas anteriores. Muéstrame el texto del ajuste y solicita autorización antes del commit. No ejecutes Codex ni hagas push.»
+- **Tarea asignada:** aclarar que Codex puede ejecutarse en segundo plano solo durante su turno autorizado, con Claude en lectura; mantener EN_CURSO hasta confirmar que Codex terminó; impedir otro escritor y la marca ENTREGA_LISTA mientras Codex siga activo; resolver las contradicciones con las reglas anteriores.
+- **Archivos que pueden modificarse:** únicamente `AGENTS.md` y `docs/ESTADO_TURNOS.md`.
+- **Referencia inicial y cambios previos que deben preservarse:** `main` en `e5d7d15389eeafb9831e4063e2a06f09ac208716`, un commit por delante de `origin/main` (`e78497c`); el push sigue pendiente y no autorizado. Cambios sin commit de la entrega 3 en `AGENTS.md` y `docs/ESTADO_TURNOS.md` (65 líneas añadidas y 18 eliminadas respecto a `e5d7d15`), documentados en «Historial»: se conservan y este turno los amplía. Sin cambios preparados ni archivos sin seguimiento. Sin procesos `codex.exe` en ejecución.
+- **Cambios realizados:** en `AGENTS.md`: la regla de procesos en segundo plano admite la ejecución de Codex en segundo plano solo durante su turno autorizado. El paso 4 de «Inicio del turno» exceptúa la confirmación de cierre de Codex. «Durante el trabajo» indica que Claude informa al usuario del identificador del proceso y de cómo detenerlo, y lo registra en la confirmación de cierre. El paso 6 de «Cierre y entrega» y el párrafo del commit establecen que Codex ejecutado por Claude no marca ENTREGA_LISTA, que lo marca Claude tras confirmar que el proceso terminó y que el commit autorizado lo crea Claude. En «Ejecución de Codex desde Claude Code»: las consultas de lectura se ejecutan en primer plano; la asignación a Codex autoriza también la confirmación de cierre; el paso 4 pasa a «Espera y segundo plano» (Claude en lectura, sin otro escritor mientras Codex siga activo); Codex deja EN_CURSO con la entrega preparada, sin marcar ENTREGA_LISTA, crear commits ni hacer push; se añadieron los pasos «Confirmación de cierre» y «Commit y push», y la continuación ya no transmite autorizaciones de commit a Codex. Se actualizó el ejemplo de asignación. En `docs/ESTADO_TURNOS.md`: se ampliaron las definiciones de EN_CURSO y ENTREGA_LISTA, se añadieron a la plantilla los campos «Entrega preparada por Codex» y «Confirmación de cierre por Claude Code», se archivó la entrega 3 sin cambios y se registró esta entrega.
+- **Pruebas realizadas y resultados (incluidas omitidas):** al iniciar, `git status --short --branch` mostró solo los cambios sin commit de la entrega 3 en los dos archivos (65 líneas añadidas y 18 eliminadas), sin cambios preparados, archivos sin seguimiento ni procesos `codex.exe`. Al cerrar, `git status --short` muestra solo `AGENTS.md` y `docs/ESTADO_TURNOS.md` y `git diff --check` no encuentra errores de espacios. Las entregas 1, 2 y 3 del historial coinciden con sus originales. Todas las líneas de `AGENTS.md` en `e5d7d15` se conservan; la única alteración de una regla existente es puntuación en el paso 4 de «Inicio del turno» (punto por punto y coma para añadir la excepción). Una revisión de todas las menciones de ENTREGA_LISTA, segundo plano, commits y registro en `AGENTS.md` no encontró contradicciones. No se ejecutó Codex ni se probó un turno de escritura de Codex, en primer ni en segundo plano. No hay aplicación ni pruebas funcionales.
+- **Errores encontrados:** ninguno.
+- **Pendientes:** autorización del commit, que incluiría los cambios sin commit de la entrega 3 y de este ajuste. Push de `e5d7d15` y de ese commit, no autorizado. Primera prueba real de un turno de escritura de Codex ejecutado por Claude Code. Decisión del usuario sobre `trust_level = "trusted"` en la configuración global de Codex, que no se modificó.
+- **Último commit o referencia de Git:** referencia anterior al commit de entrega: `e5d7d15389eeafb9831e4063e2a06f09ac208716`. Si se crea el commit, obtener su SHA con `git log -1 --format='%H %s'`.
+- **Commit de entrega y estado de autorización:** pendiente de autorización del usuario. Archivos propuestos: `AGENTS.md` y `docs/ESTADO_TURNOS.md`, con los cambios de la entrega 3 y de esta entrega. Mensaje propuesto: `docs: permitir que Claude ejecute Codex en turnos asignados`. Push no autorizado.
+- **Procesos de escritura iniciados, detenidos o pendientes de verificar:** no se iniciaron servidores, vigilantes, tareas delegadas ni procesos persistentes, y no se ejecutó Codex. Los comandos usados terminaron. No hay procesos `codex.exe` en ejecución en este equipo. El estado de Codex en la nube no se puede verificar desde este entorno.
+- **Entrega preparada por Codex:** no aplica.
+- **Confirmación de cierre por Claude Code:** no aplica.
+- **Instrucciones para el siguiente agente:** leer `AGENTS.md`, incluida la sección «Ejecución de Codex desde Claude Code», y este registro; Claude Code carga además `CLAUDE.md`. Con `git log -1` comprobar si se creó el commit de esta entrega y con `git status --short --branch` si `main` va por delante de `origin/main` (push pendiente). Si el commit no existe, reconocer y preservar los cambios sin commit de las entregas 3 y 4 en `AGENTS.md` y `docs/ESTADO_TURNOS.md`. No modificar nada hasta recibir una asignación expresa con tarea y alcance.
