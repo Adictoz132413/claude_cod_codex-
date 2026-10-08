@@ -21,8 +21,9 @@ El contador bajo el título indica cuántas tareas quedan pendientes.
 
 Las tareas se guardan en el almacenamiento local del navegador (`localStorage`) y se conservan al recargar o al cerrar y volver a abrir la página.
 
+- Al abrir un archivo local (`file://`), la disponibilidad y conservación del almacenamiento dependen del navegador. Prueba la recarga en el navegador que vayas a usar; mover o renombrar el archivo puede hacer que deje de ver las tareas guardadas.
 - Solo están en ese navegador y en ese equipo: otro navegador, otro perfil u otro equipo no las ve.
-- Se pierden si borras los datos de navegación de la página o si la usas en una ventana privada.
+- Se pierden si borras los datos de navegación de la página. En una ventana privada, normalmente se borran al cerrar todas las ventanas privadas.
 - Si el navegador no permite usar el almacenamiento, la página lo avisa y sigue funcionando, pero sin conservar las tareas al recargar.
 
 ## Cómo probarla

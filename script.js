@@ -17,7 +17,10 @@
       task !== null &&
       typeof task === "object" &&
       typeof task.id === "string" &&
+      /^[A-Za-z0-9-]+$/.test(task.id) &&
       typeof task.title === "string" &&
+      task.title.trim().length > 0 &&
+      task.title.length <= 200 &&
       typeof task.done === "boolean"
     );
   }
@@ -36,7 +39,17 @@
     }
     try {
       const data = JSON.parse(raw);
-      return Array.isArray(data) ? data.filter(isValidTask) : [];
+      if (!Array.isArray(data)) {
+        return [];
+      }
+      const ids = new Set();
+      return data.filter((task) => {
+        if (!isValidTask(task) || ids.has(task.id)) {
+          return false;
+        }
+        ids.add(task.id);
+        return true;
+      });
     } catch (error) {
       return [];
     }
